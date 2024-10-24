@@ -1,15 +1,21 @@
 import Carousel from "@develnotes/carousel";
+import { examples } from "./code/examples";
+import hljs from "highlight.js";
+import "highlight.js/styles/atom-one-dark.css";
+import { useEffect, useState } from "react";
+import { IconBrandGithubFilled } from "@tabler/icons-react";
+
 
 function App() {
 
-	type Post = {
+	type Card = {
 		id: string,
 		title: string,
 		author: string,
 		image: string,
 	}
 
-	const posts: Post[] = [
+	const cards: Card[] = [
 		{
 			id: "0",
 			title: "First post",
@@ -30,26 +36,58 @@ function App() {
 		}
 	];
 
-	const renderPost = ({ item }: { item: Post }) => {
+	const Card = ({ props }: { props: Card }) => {
 		return (
 			<div className="post">
-				<h2 className="post__title">{item.title}</h2>
-				<h3 className="post__author">{item.author}</h3>
+				<h2 className="post__title">{props.title}</h2>
+				<h3 className="post__author">{props.author}</h3>
 				<div className="post__image">
-					<img src={item.image} alt="post image" />
+					<img src={props.image} alt="post image" />
 				</div>
 			</div>
 		);
 	};
 
+	const renderCard = (item: Card) => <Card props={item} />;
+
+	const [showCode, setShowCode] = useState<boolean>(false);
+
+	useEffect(() => {
+		hljs.highlightAll();
+	}, [showCode]);
+
+
 	return (
 		<div className="app">
 
-			<div className="my-carousel">
-				<Carousel list={posts} renderComponent={renderPost} />
-			</div>
+			<h1>Carousel Demo App</h1>
+
+			<section>
+				<div className="cards">
+					<Carousel list={cards} renderComponent={renderCard} />
+				</div>
+				{
+					showCode &&
+					<div className="code">
+						<pre><code className="language-javascript">{examples[0]}</code></pre>
+					</div>
+				}
+			</section>
+			<button className="button" onClick={() => {
+				if (showCode) {
+					setShowCode(false);
+				} else {
+					setShowCode(true);
+				}
+			}}>{showCode ? "Hide code" : "Show code"}</button>
+
+			<footer className="footer">
+				<div className="footer__copy-and-name">&copy; 2024 - Carousel Demo App</div>
+				<div className="footer__separator"></div>
+				<div className="footer__github-link"><a href="https://github.com/develnotes/carousel-demo-app"><IconBrandGithubFilled size={18} /></a></div>
+			</footer>
 		</div>
-	)
+	);
 }
 
 export default App;
