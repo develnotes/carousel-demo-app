@@ -1,4 +1,4 @@
-import Carousel from "../../library/dist/Carousel";
+import Carousel from "@develnotes/carousel";
 
 function App() {
 
